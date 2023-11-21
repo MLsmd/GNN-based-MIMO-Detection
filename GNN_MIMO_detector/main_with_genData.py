@@ -9,12 +9,13 @@ import time
 from parsers import parsersers_,constellation
 from Train_Eval_funcs import train,evaluate
 from Data_loader import Data_loader
-from GNN_model import GNN
+from GNN_model_luca import GNN
+#from GNN_model import GNN
 
 
 # initialization
 
-dtype = torch.float64
+dtype = torch.float32
 torch.set_default_dtype(dtype)
 device = torch.device('cuda', index=0) if torch.cuda.is_available() else torch.device('cpu')
 if torch.cuda.is_available():
@@ -35,7 +36,14 @@ dropout         = args['Dropout']
 total_samples   = args['samples']
 batch_size      = args['batch_size']
 
-model = GNN(iter_gnn,num_neuron,num_su,num_classes,Nt*2,with_mmse,dropout).to(device)
+#model = GNN(iter_gnn,num_neuron,num_su,num_classes,Nt*2,with_mmse,dropout).to(device)
+
+model = GNN(user_num=2*Nt,
+            in_size=3, out_size=num_classes, size_vn_values=8, size_edge_embed=2,
+            n_hidden_layers_prop=2, size_per_hidden_layer_prop=[num_neuron, num_neuron//2],
+            size_edge_values=8, size_gru_hidden_state=num_neuron, size_agg_embed=0, size_out_layer_agg=8,
+            n_hidden_layers_readout=2, size_per_hidden_layer_readout=[num_neuron, num_neuron//2], device=device,
+            n_gnn_iters=iter_gnn)
 
 print(f'Nr={Nr},Nt={Nt},snr_db_min={snr_db_min},snr_db_max={snr_db_max},num_epochs={num_epochs},num_neuron={num_neuron},iter_GNN={iter_gnn}')
 
