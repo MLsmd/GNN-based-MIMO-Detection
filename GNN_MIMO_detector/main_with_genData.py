@@ -9,7 +9,7 @@ import time
 from parsers import parsersers_,constellation
 from Train_Eval_funcs import train,evaluate
 from Data_loader import Data_loader
-from GNN_model_luca import GNN
+from GNN_model_luca2 import GNN
 #from GNN_model import GNN
 
 
