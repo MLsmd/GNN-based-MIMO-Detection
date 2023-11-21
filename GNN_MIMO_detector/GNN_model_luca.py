@@ -18,7 +18,7 @@ class GNN(t.nn.Module):
         self.propagation = PropagationModule(size_vn_values=size_vn_values, size_edge_embed=size_edge_embed, n_hidden_layers=n_hidden_layers_prop, size_per_hidden_layer=size_per_hidden_layer_prop, size_edge_values=size_edge_values, device=device)
         self.aggregation = AggregationModule(size_gru_hidden_state=size_gru_hidden_state, size_edge_values=size_edge_values, size_agg_embed=size_agg_embed, size_out_layer=size_out_layer_agg, device=device)
         self.readout = ReadoutModule(size_vn_values=size_vn_values, out_size=out_size, n_hidden_layers=n_hidden_layers_readout, size_per_hidden_layer=size_per_hidden_layer_readout, device=device)
-        self.gru = TimeDistributed_GRU(t.nn.GRUCell, size_edge_values, size_gru_hidden_state)
+        self.gru = TimeDistributed_GRU(t.nn.GRUCell, size_edge_values, size_gru_hidden_state).to(self.device)
 
         # Linear layer to generate initial vn_values
         self.vn_value_init = t.nn.Linear(in_features=in_size, out_features=size_vn_values, device=device)
