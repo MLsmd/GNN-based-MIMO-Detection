@@ -27,7 +27,7 @@ class GNN(t.nn.Module):
         # translate to luca's model
         batch_size = init_features.shape[0]
         x = init_features
-        edge_embed = t.zeros((batch_size, self.user_num, self.user_num, 2))
+        edge_embed = t.zeros((batch_size, self.user_num, self.user_num, 2), device=self.device)
         counter = 0
         for i in range(self.user_num):
             for j in range(self.user_num):
@@ -122,5 +122,5 @@ class ReadoutModule(t.nn.Module):
     def forward(self, vn_value):
         x = vn_value.clone()
         for i in range(self.n_hidden_layers):
-            x = self.act_fct( self.linear_layers[i](x) )
-        return self.softmax(self.linear_layers[-1](x))
+            x = self.linear_layers[i](x) 
+        return self.linear_layers[-1](x)
