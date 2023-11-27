@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import pandas as pd
+import numpy as np
 import os
 
 from datetime import datetime
@@ -15,12 +16,15 @@ from GNN_luca import GNN_fully_connected
 
 # initialization
 
-dtype = torch.float64
+dtype = torch.float32
 torch.set_default_dtype(dtype)
 device = torch.device('cuda', index=0) if torch.cuda.is_available() else torch.device('cpu')
 if torch.cuda.is_available():
     torch.cuda.set_device(0)
-        
+
+torch.manual_seed(0)
+np.random.seed(0)
+
 args            = vars(parsersers_())
 Nr              = args['Nr']
 Nt              = args['Nt']
