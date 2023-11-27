@@ -9,7 +9,8 @@ import time
 from parsers import parsersers_,constellation
 from Train_Eval_funcs import train,evaluate
 from Data_loader import Data_loader
-from GNN_model import GNN
+#from GNN_model import GNN
+from GNN_luca import GNN_fully_connected
 
 
 # initialization
@@ -35,7 +36,20 @@ dropout         = args['Dropout']
 total_samples   = args['samples']
 batch_size      = args['batch_size']
 
-model = GNN(iter_gnn,num_neuron,num_su,num_classes,Nt*2,with_mmse,dropout).to(device)
+#model = GNN(iter_gnn,num_neuron,num_su,num_classes,Nt*2,with_mmse,dropout).to(device)
+model = GNN_fully_connected(n=Nt, m=Nr, in_size=3, out_size=num_classes,
+                            size_vn_values = 8, # N_u in [KOM+22]
+                            size_edge_embed = 2, # (h_k^T h_j, sigma2_noise) for each edge f_{j,k}
+                            n_hidden_layers_prop = 2,
+                            size_per_hidden_layer_prop = [num_neuron, num_neuron//2], # l and l/2 in [SML+20]
+                            size_edge_values = 8,
+                            size_gru_hidden_state=num_neuron, # l in [SML+20]
+                            size_agg_embed = 0, # no aggregation embedding here
+                            size_out_layer_agg = 8, # N_u
+                            n_hidden_layers_readout = 2,
+                            size_per_hidden_layer_readout = [num_neuron, num_neuron//2], # N_h1 and N_h2
+                            device = device,
+                            )
 
 print(f'Nr={Nr},Nt={Nt},snr_db_min={snr_db_min},snr_db_max={snr_db_max},num_epochs={num_epochs},num_neuron={num_neuron},iter_GNN={iter_gnn}')
 

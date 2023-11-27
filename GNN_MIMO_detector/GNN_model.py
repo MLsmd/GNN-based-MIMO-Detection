@@ -44,8 +44,6 @@ class GNN(nn.Module):
         self.a3=nn.Sigmoid()
         self.softmax = nn.Softmax(dim=1)
         # self.dropout= nn.Dropout(p=dropout_rate)
-        
-        
 
     def forward(self, init_features, edge_weight, noise_info, hx_init, cons, x_hat_MMSE, var_MMSE):
         '''===========================custom layers========================'''
@@ -135,4 +133,3 @@ class GNN(nn.Module):
    
 
         return z
-    
