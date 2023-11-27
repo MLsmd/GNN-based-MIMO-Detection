@@ -24,10 +24,12 @@ class GNN_fully_connected(t.nn.Module):
         n_gnn_iters = 10
         x = init_features
         edge_embed = t.zeros((batch_size, 2*self.n, 2*self.n, 2), device=self.device)
-        for i in range(self.n):
-            for j in range(self.m):
+        count = 0
+        for i in range(2*self.n):
+            for j in range(2*self.m):
                 if i != j:
-                    edge_embed[:,i,j,0] = edge_weight[:,i*(self.n-1)+j]
+                    edge_embed[:,i,j,0] = edge_weight[:,count]
+                    count += 1
                     edge_embed[:,i,j,1] = noise_info[:,0]
 
         agg_embed = t.zeros(size=(batch_size,2*self.n,0), device=self.device)
